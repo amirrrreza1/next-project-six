@@ -1,3 +1,4 @@
+import Layout from "@/Components/Layout/Layout";
 import "./globals.css";
 
 export const metadata = {
@@ -14,7 +15,9 @@ export default function RootLayout({ children }) {
           src="//unpkg.com/react-scan/dist/auto.global.js"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <Layout>{children}</Layout>
+      </body>
     </html>
   );
 }

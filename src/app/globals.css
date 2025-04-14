@@ -1,11 +1,30 @@
 @import "tailwindcss";
 
 @layer base {
- *{
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box; 
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  scroll-behavior: smooth;
- }
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    scroll-behavior: smooth;
+    ::-webkit-scrollbar {
+      width: var(--sb-size);
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--sb-track-color);
+      border-radius: 1px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--sb-thumb-color);
+      border-radius: 1px;
+    }
+  }
+}
+
+body {
+  --sb-track-color: #e5e7ec;
+  --sb-thumb-color: #000000;
+  --sb-size: 10px;
 }
