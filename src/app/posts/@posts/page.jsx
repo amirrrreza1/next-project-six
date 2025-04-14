@@ -1,6 +1,7 @@
 // posts/page.tsx
 "use client";
 
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -28,6 +29,9 @@ const Posts = () => {
       {posts.map((post) => (
         <div key={post.id} className="mb-2 bg-gray-100 p-2 rounded">
           {post.title}
+          <Link href={`/posts/${post.id}`} className="text-blue-500"> 
+          Read More
+          </Link>
         </div>
       ))}
     </section>
