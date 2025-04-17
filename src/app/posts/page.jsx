@@ -1,64 +1,44 @@
-"use client";
-
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const PostsPage = () => {
-  const [posts, setPosts] = useState([]);
-  const [authors, setAuthors] = useState([]);
-  const searchParams = useSearchParams();
-  const router = useRouter();
+async function getData(userId) {
+  const [postsRes, authorsRes] = await Promise.all([
+    fetch("https://jsonplaceholder.typicode.com/posts", { cache: "no-store" }),
+    fetch("https://jsonplaceholder.typicode.com/users", { cache: "no-store" }),
+  ]);
 
-  const selectedUserId = searchParams.get("userId");
+  const [posts, authors] = await Promise.all([
+    postsRes.json(),
+    authorsRes.json(),
+  ]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const [postsRes, authorsRes] = await Promise.all([
-        fetch("https://jsonplaceholder.typicode.com/posts"),
-        fetch("https://jsonplaceholder.typicode.com/users"),
-      ]);
+  const filteredPosts = userId
+    ? posts.filter((post) => post.userId.toString() === userId)
+    : posts;
 
-      const [postsData, authorsData] = await Promise.all([
-        postsRes.json(),
-        authorsRes.json(),
-      ]);
+  return { posts: filteredPosts, authors };
+}
 
-      const filteredPosts = selectedUserId
-        ? postsData.filter((post) => post.userId.toString() === selectedUserId)
-        : postsData;
-
-      setPosts(filteredPosts);
-      setAuthors(authorsData);
-    };
-
-    fetchData();
-  }, [selectedUserId]);
-
-  const handleAuthorClick = (id) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("userId", id);
-    router.push(`?${params.toString()}`);
-  };
+export default async function PostsPage({ searchParams }) {
+  const { posts, authors } = await getData(searchParams.userId);
 
   return (
     <div className="flex justify-around items-start">
-      <div className="w-[20%] flex flex-wrap justify-center mb-6 ">
+      <div className="w-[20%] flex flex-wrap justify-center mb-6">
         <h2 className="text-4xl font-bold text-center my-5">Authors</h2>
-        <div
-          onClick={() => handleAuthorClick("")}
+        <Link
+          href="/posts"
           className="cursor-pointer w-[95%] h-[60px]
-                rounded-md flex justify-center items-center text-center 
-                transition font-semibold mb-2 bg-gray-200 hover:bg-gray-300"
+            rounded-md flex justify-center items-center text-center 
+            transition font-semibold mb-2 bg-gray-200 hover:bg-gray-300"
         >
           Deselect Author
-        </div>
+        </Link>
         {authors.map((author) => {
-          const isSelected = selectedUserId === author.id.toString();
+          const isSelected = searchParams.userId === author.id.toString();
           return (
-            <div
+            <Link
               key={author.id}
-              onClick={() => handleAuthorClick(author.id)}
+              href={`/posts?userId=${author.id}`}
               className={`cursor-pointer w-[95%] h-[60px]
                 rounded-md flex justify-center items-center text-center 
                 transition font-semibold mb-2 ${
@@ -68,7 +48,7 @@ const PostsPage = () => {
                 }`}
             >
               {author.username} - {author.name}
-            </div>
+            </Link>
           );
         })}
       </div>
@@ -79,7 +59,7 @@ const PostsPage = () => {
             <Link
               href={`/posts/${post.id}`}
               key={post.id}
-              className="mb-2 bg-gray-100 p-2 rounded"
+              className="mb-2 bg-gray-100 p-2 rounded hover:bg-gray-200 transition"
             >
               {index + 1}-{post.title}
             </Link>
@@ -88,6 +68,4 @@ const PostsPage = () => {
       </section>
     </div>
   );
-};
-
-export default PostsPage;
+}
