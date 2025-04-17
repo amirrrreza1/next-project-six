@@ -24,11 +24,11 @@ export default async function PostsPage({ searchParams }) {
 
   return (
     <div className="flex justify-around items-start">
-      <div className="w-[20%] flex flex-wrap justify-center mb-6">
+      <div className="w-[20%] flex flex-wrap justify-center mb-6 sticky top-[-70px]">
         <h2 className="text-4xl font-bold text-center my-5">Authors</h2>
         <Link
           href="/posts"
-          className="cursor-pointer w-[95%] h-[60px]
+          className="cursor-pointer w-[95%] h-[50px]
             rounded-md flex justify-center items-center text-center 
             transition font-semibold mb-2 bg-gray-200 hover:bg-gray-300"
         >
@@ -40,7 +40,7 @@ export default async function PostsPage({ searchParams }) {
             <Link
               key={author.id}
               href={`/posts?userId=${author.id}`}
-              className={`cursor-pointer w-[95%] h-[60px]
+              className={`cursor-pointer w-[95%] h-[50px]
                 rounded-md flex justify-center items-center text-center 
                 transition font-semibold mb-2 ${
                   isSelected
