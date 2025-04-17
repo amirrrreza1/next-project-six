@@ -15,7 +15,8 @@ const ROUTES = [
   },
 ];
 
-const Layout = async ({ children }) => {
+const Layout = async ({ children , searchParams }) => {
+
   return (
     <>
       <header className="w-full h-[60px] m-auto bg-black text-white flex   justify-center items-center gap-3">

@@ -19,7 +19,8 @@ async function getData(userId) {
 }
 
 export default async function PostsPage({ searchParams }) {
-  const { posts, authors } = await getData(searchParams.userId);
+  const userId = await searchParams?.userId || null;
+  const { posts, authors } = await getData(userId);
 
   return (
     <div className="flex justify-around items-start">
@@ -34,7 +35,7 @@ export default async function PostsPage({ searchParams }) {
           Deselect Author
         </Link>
         {authors.map((author) => {
-          const isSelected = searchParams.userId === author.id.toString();
+          const isSelected = userId === author.id.toString();
           return (
             <Link
               key={author.id}
